@@ -27,4 +27,9 @@ public class Input {
 		System.out.println("Done!");
 	}
 	
+	public static void reset() {
+		cursorPosInput.reset();
+		mouseScrollInput.reset();
+	}
+	
 }

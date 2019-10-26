@@ -3,7 +3,10 @@ package voxel;
 import org.lwjgl.glfw.GLFW;
 
 import voxel.display.Window;
+import voxel.game.Game;
 import voxel.input.Input;
+import voxel.model.Assets;
+import voxel.model.loader.Loader;
 
 public class Main implements Runnable{
 	
@@ -17,26 +20,38 @@ public class Main implements Runnable{
 	private double avgMSF = 0;
 	private double timeElapsed = 0;
 	
+	//game
+	private Game game;
+	
+	//loader
+	private Loader loader;
+	
 	public Main() {
 		
 	}
 	
 	private void init() {
+		loader = new Loader();
 		Window.init();
 		Input.init();
+		Assets.init(loader);
+		(game = new Game()).init();
 	}
 	
 	private void loop() {
 		while(!GLFW.glfwWindowShouldClose(Window.window)) {
 			sync();
+			Input.reset();
 			Window.setTitle();
 			Window.beforeRender();
-			
+			game.update();
+			game.render();
 			Window.afterRender();
 		}
 	}
 	
 	private void destroy() {
+		loader.cleanUp();
 		Window.closeDisplay();
 	}
 	
